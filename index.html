@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Área de Membros — GEST</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Poppins',sans-serif;background:#f0f4f8;min-height:100vh;display:flex;align-items:center;justify-content:center;}
+
+/* ─── TELA DE LOGIN ─── */
+.login-wrap{width:100%;max-width:420px;padding:20px;}
+.login-card{background:#fff;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,0.10);padding:40px 36px 32px;text-align:center;}
+.login-card .logo{margin-bottom:8px;}
+.login-card .logo img{height:56px;}
+.login-card h1{font-size:20px;color:#1e2e40;font-weight:600;margin-bottom:4px;}
+.login-card p.sub{font-size:13px;color:#6b7a8d;margin-bottom:28px;}
+
+.input-group{position:relative;margin-bottom:14px;}
+.input-group i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#6b7a8d;font-size:18px;}
+.input-group input{width:100%;padding:12px 14px 12px 42px;border:1.5px solid #dde3ea;border-radius:10px;font-size:15px;font-family:'Poppins',sans-serif;outline:none;transition:border-color .2s,box-shadow .2s;}
+.input-group input:focus{border-color:#2a3f54;box-shadow:0 0 0 3px rgba(42,63,84,0.10);}
+
+.btn-login{width:100%;padding:13px;background:#2a3f54;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;transition:background .2s,transform .1s;}
+.btn-login:hover{background:#1a2f42;}
+.btn-login:active{transform:scale(0.98);}
+.btn-login:disabled{background:#8fa3b1;cursor:not-allowed;}
+
+.spinner{display:none;width:22px;height:22px;border:3px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.msg-erro{display:none;margin-top:14px;padding:10px 14px;background:#fff0f0;border:1px solid #f5c6c6;border-radius:8px;color:#c0392b;font-size:13px;}
+.msg-erro i{margin-right:6px;}
+
+.divider{display:flex;align-items:center;gap:10px;margin:22px 0 16px;color:#9aa5b1;font-size:12px;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:#e2e8f0;}
+
+.link-pix{font-size:13px;color:#2a3f54;text-decoration:none;display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border:1.5px solid #c7d4de;border-radius:8px;transition:background .2s;}
+.link-pix:hover{background:#f0f4f8;}
+
+/* ─── TELA DO PAINEL ─── */
+#painel{display:none;width:100%;min-height:100vh;flex-direction:column;}
+.painel-header{background:#2a3f54;color:#fff;padding:16px 28px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px rgba(0,0,0,0.15);}
+.painel-header .marca{display:flex;align-items:center;gap:10px;font-weight:600;font-size:16px;}
+.painel-header .marca img{height:30px;}
+.user-info{display:flex;align-items:center;gap:10px;}
+.avatar{width:36px;height:36px;border-radius:50%;background:#4e7093;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;letter-spacing:-.5px;}
+.btn-sair{background:rgba(255,255,255,0.12);border:none;color:#fff;padding:7px 14px;border-radius:7px;cursor:pointer;font-size:13px;font-family:'Poppins',sans-serif;display:flex;align-items:center;gap:6px;transition:background .2s;}
+.btn-sair:hover{background:rgba(255,255,255,0.2);}
+
+.painel-body{flex:1;padding:32px 28px;max-width:960px;margin:0 auto;width:100%;}
+.boas-vindas{margin-bottom:28px;}
+.boas-vindas h2{font-size:22px;color:#1e2e40;font-weight:600;}
+.boas-vindas p{font-size:14px;color:#6b7a8d;margin-top:4px;}
+
+/* Cards de módulos */
+.modulos{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:32px;}
+.modulo-card{background:#fff;border-radius:12px;padding:22px 18px;box-shadow:0 2px 10px rgba(0,0,0,0.06);cursor:pointer;transition:transform .15s,box-shadow .15s;text-align:center;text-decoration:none;color:inherit;display:block;border:1.5px solid #e8eef4;}
+.modulo-card:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,0.10);}
+.modulo-card .ic{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 12px;}
+.modulo-card h3{font-size:14px;font-weight:600;color:#1e2e40;margin-bottom:4px;}
+.modulo-card p{font-size:12px;color:#6b7a8d;}
+
+/* Iframe de conteúdo */
+.iframe-wrap{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.08);}
+.iframe-nav{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid #e8eef4;}
+.btn-voltar{background:#f0f4f8;border:none;padding:7px 14px;border-radius:7px;cursor:pointer;font-size:13px;font-family:'Poppins',sans-serif;display:flex;align-items:center;gap:6px;color:#2a3f54;font-weight:500;transition:background .2s;}
+.btn-voltar:hover{background:#dde5ed;}
+.iframe-titulo{font-size:14px;font-weight:600;color:#2a3f54;}
+.iframe-wrap iframe{width:100%;height:80vh;border:none;display:block;}
+
+/* ─── MODAL PIX ─── */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9999;justify-content:center;align-items:center;}
+.modal-bg.ativo{display:flex;}
+.modal-box{background:#fff;border-radius:14px;padding:30px 28px;width:90%;max-width:360px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,0.15);}
+.modal-box h3{font-size:17px;color:#1e2e40;margin-bottom:16px;}
+.modal-box input{width:100%;padding:11px 14px;border:1.5px solid #dde3ea;border-radius:9px;font-size:14px;font-family:'Poppins',sans-serif;outline:none;margin-bottom:10px;}
+.modal-box input:focus{border-color:#2a3f54;}
+.pix-info{background:#f0f4f8;border-radius:9px;padding:12px;margin-bottom:14px;font-size:13px;color:#1e2e40;line-height:1.7;}
+.pix-info strong{color:#2a3f54;}
+.btn-pix{width:100%;padding:12px;background:#25D366;color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .2s;text-decoration:none;margin-top:4px;}
+.btn-pix:hover{background:#1da851;}
+.btn-fechar-modal{margin-top:12px;background:none;border:none;color:#9aa5b1;cursor:pointer;font-size:13px;text-decoration:underline;font-family:'Poppins',sans-serif;}
+
+@media(max-width:600px){
+  .painel-header{padding:12px 16px;}
+  .painel-body{padding:20px 14px;}
+  .modulos{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+     TELA DE LOGIN
+══════════════════════════════════ -->
+<div id="login-wrap" class="login-wrap">
+  <div class="login-card">
+    <div class="logo">
+      <img src="https://i.ibb.co/JW5wgT3s/plataformagest.png" alt="GEST">
+    </div>
+    <h1>Área de Membros</h1>
+    <p class="sub">Acesse seu espaço pedagógico exclusivo</p>
+
+    <div class="input-group">
+      <i class="ri-user-3-line"></i>
+      <input type="text" id="usuario" placeholder="Usuário" autocomplete="username">
+    </div>
+    <div class="input-group">
+      <i class="ri-lock-2-line"></i>
+      <input type="password" id="senha" placeholder="Senha" autocomplete="current-password" onkeydown="if(event.key==='Enter')entrar()">
+    </div>
+
+    <button class="btn-login" id="btn-entrar" onclick="entrar()">
+      <span id="btn-texto">Entrar na minha área</span>
+      <div class="spinner" id="spinner"></div>
+    </button>
+
+    <div class="msg-erro" id="msg-erro">
+      <i class="ri-error-warning-line"></i>
+      <span id="texto-erro">Usuário ou senha inválidos.</span>
+    </div>
+
+    <div class="divider">ou</div>
+    <a href="#" class="link-pix" onclick="abrirPix();return false;">
+      <i class="ri-bank-card-line"></i> Criar conta via Pix
+    </a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     PAINEL DO PROFESSOR
+══════════════════════════════════ -->
+<div id="painel">
+  <div class="painel-header">
+    <div class="marca">
+      <img src="https://cdn-icons-png.flaticon.com/512/2098/2098298.png" alt="GEST">
+      Plataforma GEST
+    </div>
+    <div class="user-info">
+      <div class="avatar" id="avatar-iniciais">--</div>
+      <span id="nome-usuario" style="font-size:14px;font-weight:500;"></span>
+      <button class="btn-sair" onclick="sair()">
+        <i class="ri-logout-box-r-line"></i> Sair
+      </button>
+    </div>
+  </div>
+
+  <div class="painel-body">
+    <div class="boas-vindas">
+      <h2 id="msg-boas-vindas">Olá, professor(a)!</h2>
+      <p>Bem-vindo(a) ao seu espaço exclusivo. Selecione um módulo abaixo.</p>
+    </div>
+
+    <div class="modulos" id="modulos-container">
+      <!-- Cards gerados dinamicamente pelo JS -->
+    </div>
+
+    <div class="iframe-wrap" id="iframe-wrap" style="display:none;">
+      <div class="iframe-nav">
+        <button class="btn-voltar" onclick="voltarModulos()">
+          <i class="ri-arrow-left-line"></i> Voltar
+        </button>
+        <span class="iframe-titulo" id="iframe-titulo"></span>
+      </div>
+      <iframe id="iframe-conteudo" src="" allowfullscreen></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     MODAL PIX
+══════════════════════════════════ -->
+<div class="modal-bg" id="modal-pix">
+  <div class="modal-box">
+    <h3>Criar conta via Pix</h3>
+    <input type="text" id="pix-nome" placeholder="Seu nome completo">
+    <input type="text" id="pix-cpf"  placeholder="Seu CPF">
+    <div class="pix-info">
+      💰 Valor: <strong>R$ 25,00/mês</strong><br>
+      📎 Chave Pix (CPF): <strong>96702656220</strong><br>
+      <small style="color:#6b7a8d;">Após pagar, clique em "Já paguei" e envie o comprovante.</small>
+    </div>
+    <a href="#" class="btn-pix" id="btn-whats" onclick="abrirWhats();return false;">
+      <i class="ri-whatsapp-line"></i> Já paguei — enviar comprovante
+    </a>
+    <button class="btn-fechar-modal" onclick="fecharPix()">Fechar</button>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   ▼▼▼  CONFIGURAÇÃO — COLE AQUI A URL DO SEU APPS SCRIPT  ▼▼▼
+   Este Apps Script consulta a planilha de usuários e retorna:
+   { status:"ok", nome:"Maria Silva", pagina:"https://..." }
+   ou
+   { status:"erro" }
+   Veja o arquivo "appscript_membros.gs" para o código completo.
+   ================================================================ */
+const API_MEMBROS = "https://script.google.com/macros/s/AKfycbyb5r4tKOiQjIlHlNCZOL7UvtCEBTHkrJE72RWmosBoWgyXDEcLP--4QUw-OZbIdQEnNA/exec";
+/* ================================================================
+   ▲▲▲  FIM DA CONFIGURAÇÃO  ▲▲▲
+   ================================================================ */
+
+/* ─── Módulos fixos comuns a todos os professores ─── */
+const MODULOS_COMUNS = [
+  { icone:"ri-calendar-check-line", cor:"#e8f0fe", corpic:"#4a6cf7", titulo:"Meu Diário de Classe",   desc:"Registros e frequência",        chave:"diario"    },
+  { icone:"ri-bar-chart-2-line",    cor:"#e6f7f0", corpic:"#1a9e6b", titulo:"Minhas Notas",            desc:"Lançar e consultar notas",      chave:"notas"     },
+  { icone:"ri-file-list-3-line",    cor:"#fef5e7", corpic:"#e07b00", titulo:"Meu Planejamento",        desc:"Sequências e planos de aula",   chave:"planej"    },
+  { icone:"ri-group-2-line",        cor:"#fce8f0", corpic:"#c0395a", titulo:"Minha Turma",             desc:"Lista e perfil dos alunos",     chave:"turma"     },
+  { icone:"ri-bookmark-3-line",     cor:"#eef4ff", corpic:"#3563d4", titulo:"Meus Materiais",          desc:"Atividades e recursos salvos",  chave:"materiais" },
+  { icone:"ri-pie-chart-2-line",    cor:"#e8f7f4", corpic:"#0d7a68", titulo:"Meus Dados",              desc:"Indicadores e gráficos",        chave:"dados"     },
+];
+
+let dadosProfessor = null;  /* { nome, pagina, modulos_extras } */
+
+/* ─── LOGIN ─── */
+async function entrar() {
+  const usuario = document.getElementById("usuario").value.trim();
+  const senha   = document.getElementById("senha").value.trim();
+  if (!usuario || !senha) return mostrarErro("Preencha usuário e senha.");
+
+  setBotao(true);
+  esconderErro();
+
+  try {
+    const resp = await fetch(API_MEMBROS, {
+      method: "POST",
+      body: JSON.stringify({ acao: "login", usuario, senha })
+    });
+    const dados = await resp.json();
+
+    if (dados.status === "ok") {
+      dadosProfessor = dados;
+      sessionStorage.setItem("gest_membro", JSON.stringify(dados));
+      mostrarPainel(dados);
+    } else {
+      mostrarErro(dados.mensagem || "Usuário ou senha inválidos.");
+    }
+  } catch (e) {
+    mostrarErro("Erro de conexão. Tente novamente.");
+    console.error(e);
+  } finally {
+    setBotao(false);
+  }
+}
+
+function setBotao(carregando) {
+  document.getElementById("btn-entrar").disabled = carregando;
+  document.getElementById("btn-texto").style.display  = carregando ? "none"  : "inline";
+  document.getElementById("spinner").style.display    = carregando ? "block" : "none";
+}
+
+function mostrarErro(msg) {
+  const el = document.getElementById("msg-erro");
+  document.getElementById("texto-erro").textContent = msg;
+  el.style.display = "flex";
+}
+function esconderErro() { document.getElementById("msg-erro").style.display = "none"; }
+
+/* ─── PAINEL ─── */
+function mostrarPainel(dados) {
+  document.getElementById("login-wrap").style.display = "none";
+  document.body.style.alignItems = "flex-start";
+
+  const painel = document.getElementById("painel");
+  painel.style.display = "flex";
+
+  /* Avatar e nome */
+  const iniciais = dados.nome.split(" ").slice(0,2).map(p=>p[0]).join("").toUpperCase();
+  document.getElementById("avatar-iniciais").textContent = iniciais;
+  document.getElementById("nome-usuario").textContent = dados.nome;
+  document.getElementById("msg-boas-vindas").textContent = `Olá, ${dados.nome.split(" ")[0]}! 👋`;
+
+  /* Montar cards de módulos */
+  const container = document.getElementById("modulos-container");
+  container.innerHTML = "";
+
+  /* Card principal — página exclusiva do professor */
+  const cardPrincipal = document.createElement("div");
+  cardPrincipal.className = "modulo-card";
+  cardPrincipal.style.border = "2px solid #2a3f54";
+  cardPrincipal.innerHTML = `
+    <div class="ic" style="background:#e8eef4;">
+      <i class="ri-dashboard-3-line" style="color:#2a3f54;font-size:26px;"></i>
+    </div>
+    <h3>Meu Painel Completo</h3>
+    <p>Seu espaço exclusivo com todos os dados</p>
+  `;
+  cardPrincipal.onclick = () => abrirIframe(dados.pagina, "Meu Painel Completo");
+  container.appendChild(cardPrincipal);
+
+  /* Cards comuns + extras do professor */
+  const modulos = [...MODULOS_COMUNS, ...(dados.modulos_extras || [])];
+  modulos.forEach(m => {
+    const link = dados[m.chave] || null; /* URL específica do professor para esse módulo */
+    const card = document.createElement("div");
+    card.className = "modulo-card";
+    card.innerHTML = `
+      <div class="ic" style="background:${m.cor};">
+        <i class="${m.icone}" style="color:${m.corpic};"></i>
+      </div>
+      <h3>${m.titulo}</h3>
+      <p>${m.desc}</p>
+    `;
+    if (link) {
+      card.onclick = () => abrirIframe(link, m.titulo);
+    } else if (dados.pagina) {
+      /* Se não há link específico, abre a página principal com âncora */
+      card.onclick = () => abrirIframe(dados.pagina + "#" + m.chave, m.titulo);
+    }
+    container.appendChild(card);
+  });
+
+  voltarModulos();
+}
+
+function abrirIframe(url, titulo) {
+  document.getElementById("modulos-container").style.display = "none";
+  document.querySelector(".boas-vindas").style.display = "none";
+  const wrap = document.getElementById("iframe-wrap");
+  wrap.style.display = "block";
+  document.getElementById("iframe-titulo").textContent = titulo;
+  document.getElementById("iframe-conteudo").src = url;
+}
+
+function voltarModulos() {
+  document.getElementById("iframe-wrap").style.display = "none";
+  document.getElementById("iframe-conteudo").src = "";
+  document.getElementById("modulos-container").style.display = "grid";
+  document.querySelector(".boas-vindas").style.display = "block";
+}
+
+/* ─── SESSÃO ─── */
+function sair() {
+  sessionStorage.removeItem("gest_membro");
+  location.reload();
+}
+
+/* Restaurar sessão ao recarregar */
+const sessao = sessionStorage.getItem("gest_membro");
+if (sessao) {
+  dadosProfessor = JSON.parse(sessao);
+  mostrarPainel(dadosProfessor);
+}
+
+/* ─── MODAL PIX ─── */
+function abrirPix()  { document.getElementById("modal-pix").classList.add("ativo"); }
+function fecharPix() { document.getElementById("modal-pix").classList.remove("ativo"); }
+function abrirWhats() {
+  const nome = document.getElementById("pix-nome").value.trim();
+  const cpf  = document.getElementById("pix-cpf").value.trim();
+  if (!nome || !cpf) { alert("Preencha nome e CPF antes de enviar."); return; }
+  const msg = encodeURIComponent(`Olá! Sou ${nome} (CPF: ${cpf}). Realizei o pagamento da Área de Membros GEST e envio o comprovante.`);
+  window.open(`https://wa.me/5569981120161?text=${msg}`, "_blank");
+}
+</script>
+</body>
+</html>
